@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "comic-vine.base-url",
+    "type": "java.lang.String",
+    "description": "URL to the Comic Vine Api"
+  },
+  {
+    "name": "comic-vine.api-key",
+    "type": "java.lang.String",
+    "description": "A description for 'comic-vine.api-key'"
+  },
+  {
+    "name": "comic-vine.format",
+    "type": "java.lang.String",
+    "description": "A description for 'comic-vine.format'"
+  }
+]}

@@ -1,0 +1,19 @@
+spring:
+    application:
+        name: comic-vine-wrapper
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - "*"
+info:
+  app:
+    name: ${spring.application.name}
+    version: "version# goes here"
+
+comic-vine:
+    base-url: "https://comicvine.gamespot.com/api"
+    api-key: ""
+    format: "json"
