@@ -34,9 +34,19 @@ public class SearchController {
     }
 
 
+    /**
+     * @param queryString
+     * @return
+     * 
+     * This works as expected now. Adding the User Agent header with any unique String was enough.
+     * Removing the User Agent and printing the String (instead of the ComicVineResponse) will show you
+     * the HTML/JS that talked about "No Wordpress Scrappers allowed".
+     */
     @GetMapping(value="/series", produces = MediaType.APPLICATION_JSON_VALUE )
     public ComicVineResponse searchForSeries(@RequestParam(name = "query") String queryString){
         HttpHeaders headers = new HttpHeaders();
+
+        // Removing this will get you the response that was gaslighting me. 
         headers.add(HttpHeaders.USER_AGENT, "driftSam.dev");
        
         URI uri = UriComponentsBuilder.fromHttpUrl(properties.getBaseUrl())
@@ -55,7 +65,18 @@ public class SearchController {
         return restTemplate.exchange(request, ComicVineResponse.class).getBody();
     }
 
-    @GetMapping(value="/wc/search/series", produces = MediaType.APPLICATION_JSON_VALUE )
+    /**
+     * @param queryString
+     * @throws InterruptedException
+     * @throws ExecutionException
+     * 
+     * This is the one that is super strange. If you modify the method to return Mono<String> it'll redirect to the comicvine site.
+     * But if you call the method as-is and print out the String response body it's a bunch of JS in an HTML script tag.
+     * The HTML/JS is completely different than the HTML/JS that got returned when using the RestTemplate w/o user agent header
+     * And adding/removing the user agent header here made no difference. 
+     *
+     */
+    @GetMapping(value="/wc/series", produces = MediaType.APPLICATION_JSON_VALUE )
     public void searchForSeriesWebClient(@RequestParam(name = "query") String queryString) throws InterruptedException, ExecutionException {
         Objects.requireNonNull(queryString);
 
@@ -75,6 +96,11 @@ public class SearchController {
 
     }
 
+    /**
+     * @return
+     * Last strange thing, blocking in a GetMapping method works now, but only after I added 
+     * spring-boot-starter-web to the pom. 
+     */
     @GetMapping("/ye")
     public String yeQuote(){
         WebClient yeClient =  WebClient.create("https://api.kanye.rest/");
